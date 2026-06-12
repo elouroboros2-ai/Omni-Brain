@@ -27,7 +27,18 @@ class MusicPlayer:
         print(f"[Music] Buscando {count} pistas para: {query} (puede tardar 5-10 segundos)...")
         try:
             cmd = ["yt-dlp", f"ytsearch{count}:{query}", "--print", "%(id)s|%(title)s", "--no-warnings"]
-            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+            
+            # Mecanismo de reintentos para evitar errores aleatorios de yt-dlp
+            result = None
+            for attempt in range(3):
+                try:
+                    result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+                    break
+                except subprocess.CalledProcessError:
+                    if attempt == 2:
+                        raise
+                    time.sleep(1)
+            
             lines = result.stdout.strip().split('\n')
             
             for line in lines:
@@ -38,6 +49,8 @@ class MusicPlayer:
             if self.playlist_queue.empty():
                 print(f"[Music Error] No se encontraron resultados para: {query}")
                 self.is_playing = False
+                import tts
+                tts.speak("No pude encontrar canciones para esa búsqueda.")
                 return
                     
             if self.worker_thread is None or not self.worker_thread.is_alive():
@@ -46,6 +59,8 @@ class MusicPlayer:
         except Exception as e:
             print(f"[Music Error] Falló la búsqueda de playlist: {e}")
             self.is_playing = False
+            import tts
+            tts.speak("Ocurrió un error al intentar buscar la música en YouTube.")
 
     def _playlist_worker(self):
         while self.is_playing:

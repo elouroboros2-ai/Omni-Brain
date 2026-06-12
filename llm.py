@@ -124,7 +124,7 @@ Categories for "intent":
 - "CHAT": General conversation or anything else.
 
 If intent is "PLAY_MUSIC", include:
-- "query": The clean name of the song/artist to search on YouTube. Fix phonetic typos and format it nicely with proper capitalization! (e.g. "bon mâler" -> "Bob Marley").
+- "query": The exact name of the song/artist to search on YouTube. IMPORTANT: DO NOT translate or autocorrect artist names or song titles! If the user says "canserbero", keep "canserbero", DO NOT change it to "Canceroso" or any other word.
 - "is_playlist": boolean (true if they asked for a playlist/lista/liste).
 
 If intent is "OPEN_APP", include:
