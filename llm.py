@@ -124,8 +124,8 @@ Categories for "intent":
 - "CHAT": General conversation or anything else.
 
 If intent is "PLAY_MUSIC", include:
-- "query": The exact name of the song/artist to search on YouTube. IMPORTANT: DO NOT translate or autocorrect artist names or song titles! If the user says "canserbero", keep "canserbero", DO NOT change it to "Canceroso" or any other word.
-- "is_playlist": boolean (true if they asked for a playlist/lista/liste).
+- "query": The exact name of the song/artist, OR the mood/context described by the user (e.g. "música épica para programar", "salsa triste"). IMPORTANT: DO NOT translate or autocorrect artist names or song titles! If the user says "canserbero", keep "canserbero", DO NOT change it to "Canceroso" or any other word.
+- "is_playlist": boolean (true if they asked for a playlist/lista/liste, or if they asked for a mood/context like "música para cocinar").
 
 If intent is "OPEN_APP", include:
 - "query": The clean name of the application to open.
@@ -140,6 +140,9 @@ If intent is "CUSTOM_SCRIPT", include:
 Examples:
 Input: "Mais moi, la plait est de bon mâler."
 Output: {"intent": "PLAY_MUSIC", "query": "Bob Marley", "is_playlist": true}
+
+Input: "Pon música relajante para estudiar"
+Output: {"intent": "PLAY_MUSIC", "query": "Música relajante para estudiar", "is_playlist": true}
 
 Input: "Arrête la musique"
 Output: {"intent": "STOP_MUSIC"}
@@ -176,6 +179,50 @@ Output: {"intent": "CHAT"}"""
         print(f"[LLM Router Error] {e}")
         # Fallback to CHAT
         return {"intent": "CHAT"}
+
+def generate_radio_next(history_titles):
+    """
+    Infinite Radio: Dadas las últimas canciones, devuelve una búsqueda de YouTube recomendada.
+    """
+    if not history_titles:
+        return "Mix música variada 2024"
+        
+    history_str = "\n".join([f"- {t}" for t in history_titles])
+    system_prompt = f"""You are an expert DJ AI. The user has been listening to the following tracks:
+{history_str}
+
+Based on this context, recommend a YouTube search query that will yield similar, highly compatible music to keep the vibe going. Do NOT recommend the exact same tracks.
+Output ONLY a valid JSON object with the format:
+{{"query": "Your recommended search query here"}}
+No markdown, no explanation."""
+
+    payload = {
+        "model": MODEL,
+        "messages": [
+            {"role": "system", "content": system_prompt}
+        ],
+        "stream": False,
+        "format": "json",
+        "options": {"temperature": 0.7}
+    }
+    
+    try:
+        response = requests.post(OLLAMA_URL, json=payload, timeout=60)
+        response.raise_for_status()
+        data = response.json()
+        content = data.get("message", {}).get("content", "").strip()
+        
+        import json
+        import re
+        match = re.search(r'\{.*\}', content, re.DOTALL)
+        if match:
+            content = match.group(0)
+            
+        parsed = json.loads(content)
+        return parsed.get("query", "Mix música similar")
+    except Exception as e:
+        print(f"[LLM Radio Error] {e}")
+        return "Mix música variada 2024"
 
 if __name__ == "__main__":
     def on_chunk(text):

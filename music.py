@@ -14,6 +14,9 @@ class MusicPlayer:
         self.is_paused = False
         self.worker_thread = None
         self.current_song_title = None
+        self.history = []
+        self.library_dir = os.path.join(os.path.dirname(__file__), "OmniLibrary")
+        os.makedirs(self.library_dir, exist_ok=True)
 
     def get_current_song(self):
         return self.current_song_title
@@ -62,6 +65,26 @@ class MusicPlayer:
             import tts
             tts.speak("Ocurrió un error al intentar buscar la música en YouTube.")
 
+    def _add_to_playlist(self, query):
+        print(f"[Music Radio] Buscando: {query}...")
+        try:
+            cmd = ["yt-dlp", f"ytsearch1:{query}", "--print", "%(id)s|%(title)s", "--no-warnings"]
+            result = None
+            for attempt in range(3):
+                try:
+                    result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+                    break
+                except subprocess.CalledProcessError:
+                    if attempt == 2: raise
+                    time.sleep(1)
+            lines = result.stdout.strip().split('\n')
+            for line in lines:
+                if line and '|' in line:
+                    v_id, t = line.split('|', 1)
+                    self.playlist_queue.put((v_id, t))
+        except Exception as e:
+            print(f"[Music Radio Error] {e}")
+
     def _playlist_worker(self):
         while self.is_playing:
             try:
@@ -70,16 +93,31 @@ class MusicPlayer:
             except queue.Empty:
                 if self.current_process and self.current_process.poll() is None:
                     continue
+                # Si la cola está vacía pero is_playing sigue True, Radio Infinita
+                if self.is_playing:
+                    print("[Music Radio] Calculando siguiente pista...")
+                    import llm
+                    history_titles = [t for _, t in self.history[-3:]]
+                    next_query = llm.generate_radio_next(history_titles)
+                    self._add_to_playlist(next_query)
+                    # Comprobar de nuevo si añadió algo, sino salir para evitar loops infinitos fallidos
+                    if self.playlist_queue.empty():
+                        break
+                    continue
                 break
                 
-            fd, temp_path = tempfile.mkstemp(suffix=".m4a")
-            os.close(fd)
+            import re
+            safe_title = re.sub(r'[^\w\s-]', '', title).strip().replace(' ', '_')
+            temp_path = os.path.join(self.library_dir, f"{video_id}_{safe_title}.m4a")
             
             try:
-                print(f"[Music] Pre-descargando ID {video_id} en segundo plano...")
-                subprocess.run([
-                    "yt-dlp", "-x", "--audio-format", "m4a", "--force-overwrites", video_id, "-o", temp_path
-                ], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                if not os.path.exists(temp_path) or os.path.getsize(temp_path) == 0:
+                    print(f"[Music] Pre-descargando ID {video_id} en OmniLibrary...")
+                    subprocess.run([
+                        "yt-dlp", "-x", "--audio-format", "m4a", "--force-overwrites", video_id, "-o", temp_path
+                    ], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                else:
+                    print(f"[Music] Pista '{title}' encontrada en Caché Local. (Cero uso de red)")
                 
                 # Esperar a que la canción anterior termine
                 while self.current_process and self.current_process.poll() is None and self.is_playing:
@@ -89,9 +127,13 @@ class MusicPlayer:
                     break
                     
                 if os.path.exists(temp_path) and os.path.getsize(temp_path) > 0:
-                    self._cleanup() # Limpiar archivo anterior
+                    self._cleanup() # Limpiar estado anterior
                     self.audio_file = temp_path
                     self.current_song_title = title
+                    self.history.append((video_id, title))
+                    if len(self.history) > 10:
+                        self.history.pop(0)
+                        
                     print(f"[Music] Reproduciendo audio en fondo: {title}...")
                     self.current_process = subprocess.Popen(["ffplay", "-nodisp", "-autoexit", "-loglevel", "quiet", temp_path])
                     self.current_process.wait()  # Esperar a que termine de sonar
@@ -148,7 +190,4 @@ class MusicPlayer:
 
     def _cleanup(self):
         self.current_song_title = None
-        if self.audio_file and os.path.exists(self.audio_file):
-            try: os.remove(self.audio_file)
-            except: pass
-            self.audio_file = None
+        self.audio_file = None
