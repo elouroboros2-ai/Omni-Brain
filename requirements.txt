@@ -1,0 +1,8 @@
+rumps==0.4.0
+pynput
+openai-whisper
+openwakeword
+pyaudio
+edge-tts
+sounddevice
+numpy

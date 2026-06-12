@@ -1,0 +1,32 @@
+# Entornos Virtuales y Dependencias
+jarvis_env/
+venv/
+env/
+__pycache__/
+*.pyc
+
+# Archivos de la base de datos de memoria / estado
+jarvis_memory.json
+
+# Cachés del sistema
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Archivos de audio y temporales
+*.m4a
+*.wav
+*.mp3
+*.webm
+*.part
+*.ytdl
+temp_audio/
+
+# Archivos de configuración locales que pueden contener rutas específicas
+iniciar_jarvis.command
+*.log
+
+# Scripts de prueba que hicimos juntos
+test_*.py
+json_test.py
+time_test.py
