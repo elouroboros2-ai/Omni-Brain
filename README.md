@@ -8,7 +8,7 @@ Actualmente, **OmniBrain** está optimizado y diseñado para ejecutarse de maner
 
 - **Privacidad Total (Offline):** OmniBrain utiliza **Ollama** con el modelo `qwen2.5:7b` ejecutándose directamente en tu máquina. Ninguna de tus conversaciones, comandos o transcripciones de voz se envía a la nube.
 - **Detección de Palabra de Activación (Wake Word):** Escucha activamente "Hey Jarvis" o tu palabra clave elegida, consumiendo muy pocos recursos, listo para atenderte al instante.
-- **Reproductor de Música Integrado (Sin Anuncios):** Pídele que reproduzca cualquier canción o artista, y OmniBrain lo buscará y reproducirá usando `yt-dlp` y `ffplay`, mostrando una elegante marquesina (efecto de scroll) directamente en la barra superior de tu sistema.
+- **Agente Analizador de Streams (Radio y Caché Personal):** Cuenta con un motor algorítmico avanzado que permite la ingesta de metadatos y streams de audio públicos. OmniBrain analiza y almacena localmente el contenido de forma automatizada en tu caché personal, incluyendo una función de 'Autopilot/Radio' generativa para experimentación musical ininterrumpida. Todo operado directamente desde una interfaz minimalista en la barra de macOS.
 - **Motor de Voz Híbrido:** Cuenta con síntesis de voz mediante Edge-TTS (voces hiperrealistas por internet) o Voz Nativa del Sistema (offline y rapidísima).
 
 ## 🚀 Instalación (1 Solo Clic)
@@ -34,7 +34,7 @@ Hemos preparado un script que se encarga de instalar todo lo necesario automáti
 Simplemente haz doble clic en el archivo `start.command` generado tras la instalación. Verás aparecer el ícono del cerebro (`🧠`) en la barra de menú superior de tu Mac.
 
 Di: **"Hey Jarvis"** seguido de tu petición. 
-- Puedes decirle: *"Pon algo de música de Bob Marley"* y disfrutar del reproductor integrado sin comerciales.
+- Puedes pedirle a la IA que busque y gestione flujos de audio públicos mediante comandos de voz para estudiarlos de manera local.
 - Puedes preguntarle cualquier cosa, y la IA responderá mediante voz de forma inteligente.
 
 ## 🛠 Tecnologías Utilizadas
@@ -51,6 +51,14 @@ Di: **"Hey Jarvis"** seguido de tu petición.
 - Adaptación a interfaces multiplataforma (`pystray` o `PyQt`) para soportar Windows y Linux de manera nativa.
 - Personalización avanzada del modelo y voces desde la misma interfaz.
 
+## ⚠️ Aviso Legal / Disclaimer
+
+OmniBrain es un proyecto experimental de código abierto destinado estrictamente a **fines educativos, de investigación en IA, automatización y análisis de agentes**. 
+
+El software provee una interfaz para que los usuarios interactúen con herramientas de terceros y APIs de código abierto bajo su propia cuenta y riesgo. El creador y los mantenedores de este proyecto **no almacenan, alojan ni distribuyen** material con derechos de autor, y **no asumen responsabilidad alguna** por el uso que se le dé a este código. 
+
+Toda actividad relacionada con la extracción, almacenamiento en caché o uso de material de internet es responsabilidad única y exclusiva del usuario final, quien debe asegurarse de cumplir rigurosamente con los Términos de Servicio de las plataformas de terceros y las leyes aplicables en su región.
+
 ---
 
-¡Disfruta de tu asistente 100% privado y potente en la barra de tu menú! 🧠✨
+¡Explora el mundo de los agentes de Inteligencia Artificial locales y privados! 🧠✨
