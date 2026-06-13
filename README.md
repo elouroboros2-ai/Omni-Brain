@@ -4,8 +4,6 @@ Un asistente virtual impulsado por Inteligencia Artificial de código abierto (O
 
 <br>
 <p align="center">
-  <video src="https://github.com/elouroboros2-ai/Omni-Brain/raw/main/assets/demo_jarvis.mov" width="80%" controls="controls"></video>
-  <br><br>
   <img src="assets/retro_gui.png" width="80%" alt="Interfaz de Omni-Brain y OmniPlayer Retro">
 </p>
 <br>
