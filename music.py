@@ -14,6 +14,7 @@ class MusicPlayer:
         self.is_paused = False
         self.worker_thread = None
         self.current_song_title = None
+        self.is_radio_enabled = False
         self.history = []
         self.library_dir = os.path.join(os.path.dirname(__file__), "OmniLibrary")
         os.makedirs(self.library_dir, exist_ok=True)
@@ -24,6 +25,7 @@ class MusicPlayer:
     def play(self, query, count=1):
         self.stop()
         self.is_playing = True
+        self.is_radio_enabled = (count > 1)
         threading.Thread(target=self._start_playlist, args=(query, count), daemon=True).start()
 
     def _start_playlist(self, query, count):
@@ -93,8 +95,8 @@ class MusicPlayer:
             except queue.Empty:
                 if self.current_process and self.current_process.poll() is None:
                     continue
-                # Si la cola está vacía pero is_playing sigue True, Radio Infinita
-                if self.is_playing:
+                # Si la cola está vacía pero is_playing sigue True, y Radio Infinita está activada
+                if self.is_playing and self.is_radio_enabled:
                     print("[Music Radio] Calculando siguiente pista...")
                     import llm
                     history_titles = [t for _, t in self.history[-3:]]
