@@ -124,6 +124,10 @@ class SkinPlayerGUI(QWidget):
             self.move(self.x() + delta.x(), self.y() + delta.y())
             self.oldPos = event.globalPos()
 
+    def closeEvent(self, event):
+        self.player.stop()
+        event.accept()
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     
