@@ -30,6 +30,8 @@ class JarvisApp(rumps.App):
         self.reproductor_menu.add(self.play_pause_item)
         self.reproductor_menu.add(self.next_item)
         self.reproductor_menu.add(self.stop_item)
+        self.open_ipod_item = rumps.MenuItem("📱 Abrir iPod", callback=self.open_ipod)
+        self.reproductor_menu.add(self.open_ipod_item)
         
         # Idiomas
         self.lang_auto = rumps.MenuItem("🤖 Automático", callback=self.set_lang_auto)
@@ -430,6 +432,11 @@ class JarvisApp(rumps.App):
 
     def stop_music(self, _):
         self.music.stop()
+        
+    def open_ipod(self, _):
+        import subprocess
+        print("[Jarvis] Lanzando iPod GUI...")
+        subprocess.Popen(["/Users/heleneherzog/Downloads/Jarvis-Mac/jarvis_env/bin/python", "retro_gui.py"], cwd="/Users/heleneherzog/Downloads/Jarvis-Mac")
 
     def _clear_lang_states(self):
         self.lang_auto.state = 0

@@ -193,3 +193,14 @@ class MusicPlayer:
     def _cleanup(self):
         self.current_song_title = None
         self.audio_file = None
+
+    def pause_resume(self):
+        if self.is_paused:
+            self.resume()
+        else:
+            self.pause()
+            
+    def set_volume(self, volume):
+        # Ajustamos el volumen del sistema en Mac como fallback
+        # Lo lanzamos en un hilo para evitar lag al arrastrar el slider
+        threading.Thread(target=lambda: os.system(f"osascript -e 'set volume output volume {volume}'"), daemon=True).start()
