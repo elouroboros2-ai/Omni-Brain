@@ -50,18 +50,18 @@ class SkinPlayerGUI(QWidget):
 
         # Pantalla del iPod (Parche Blanco calculado sobre el bounding box)
         self.screen_bg = QLabel(self)
-        self.screen_bg.setGeometry(129, 60, 142, 115)
+        self.screen_bg.setGeometry(115, 45, 170, 130)
         self.screen_bg.setStyleSheet("background-color: #e5e5e5; border: 2px solid #222; border-radius: 5px;")
 
         # Título Animado (Marquee)
         self.screen = QLabel("IPOD READY", self)
-        self.screen.setGeometry(135, 70, 130, 20)
+        self.screen.setGeometry(120, 60, 160, 20)
         self.screen.setStyleSheet("font-family: Menlo, monospace; font-size: 14px; color: black; font-weight: bold; background: transparent;")
 
         # Búsqueda
         self.entry = QLineEdit(self)
         self.entry.setPlaceholderText("Buscar canción...")
-        self.entry.setGeometry(135, 110, 130, 24)
+        self.entry.setGeometry(120, 110, 160, 24)
         self.entry.setStyleSheet("background: transparent; color: black; border: 1px solid #999; font-family: Menlo, monospace; font-size: 12px; border-radius: 3px;")
         self.entry.returnPressed.connect(self.search_music)
 
@@ -83,7 +83,7 @@ class SkinPlayerGUI(QWidget):
 
         # Botón Cerrar Oculto
         close_btn = QPushButton("✖", self)
-        close_btn.setGeometry(270, 45, 20, 20)
+        close_btn.setGeometry(290, 20, 20, 20)
         close_btn.setStyleSheet("color: rgba(255,0,0,150); background: transparent; border: none; font-weight: bold; font-size: 16px;")
         close_btn.clicked.connect(self.close)
         
