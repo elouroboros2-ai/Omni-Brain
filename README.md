@@ -2,6 +2,14 @@
 
 Un asistente virtual impulsado por Inteligencia Artificial de código abierto (Ollama), diseñado para ser **100% privado, rápido y vivir directamente en la barra de menú de tu sistema**.
 
+<br>
+<p align="center">
+  <video src="assets/demo_jarvis.mov" width="80%" controls="controls"></video>
+  <br><br>
+  <img src="assets/retro_gui.png" width="80%" alt="Interfaz de Omni-Brain y OmniPlayer Retro">
+</p>
+<br>
+
 Actualmente, **Omni-Brain** está optimizado y diseñado para ejecutarse de manera nativa en **macOS**, aunque su motor interno es multiplataforma y en el futuro se planea lanzar interfaces para Windows y Linux.
 
 ## ✨ Características Principales
