@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "🧠 Iniciando la instalación de OmniBrain..."
+echo "🧠 Iniciando la instalación de Omni-Brain..."
 
 # 1. Comprobar si Homebrew está instalado (solo para macOS por ahora)
 if ! command -v brew &> /dev/null
@@ -47,4 +47,4 @@ EOF
 chmod +x start.command
 
 echo "✅ ¡Instalación Completada con Éxito!"
-echo "Para iniciar OmniBrain, simplemente haz doble clic en el archivo 'start.command' o ejecuta './start.command' en tu terminal."
+echo "Para iniciar Omni-Brain, simplemente haz doble clic en el archivo 'start.command' o ejecuta './start.command' en tu terminal."

@@ -435,8 +435,9 @@ class JarvisApp(rumps.App):
         
     def open_ipod(self, _):
         import subprocess
-        print("[Jarvis] Lanzando iPod GUI...")
-        subprocess.Popen(["/Users/heleneherzog/Downloads/Jarvis-Mac/jarvis_env/bin/python", "retro_gui.py"], cwd="/Users/heleneherzog/Downloads/Jarvis-Mac")
+        import sys
+        import os
+        subprocess.Popen([sys.executable, "retro_gui.py"], cwd=os.path.dirname(os.path.abspath(__file__)))
 
     def _clear_lang_states(self):
         self.lang_auto.state = 0
